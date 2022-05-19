@@ -23,7 +23,7 @@ sds sdsnewlen(const char *str, int strlen)
     sh->len = strlen;
     sh->avail = 0;
     if (str != NULL && strlen > 0) {
-        memcmp(sh->buf, str, strlen);
+        memcpy(sh->buf, str, strlen);
     }
     sh->buf[strlen] = '\0';
 
