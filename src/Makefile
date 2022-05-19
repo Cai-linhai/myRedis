@@ -10,14 +10,14 @@
 # 百分号相当于一个通配符
 
 REDIS_NAME = redis-test
-REDIS_OBJS = main.o sds.o
+REDIS_OBJS = main.o sds.o zmalloc.o
 
 CC=gcc
 CFLAGS=-c -Wall -g
 
 redis: $(REDIS_NAME)
 
-$(REDIS_NAME):$(REDIS_OBJ)
+$(REDIS_NAME):$(REDIS_OBJS)
 	$(CC) $^ -o $@ 
 
 %.o:%.c
