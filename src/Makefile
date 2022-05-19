@@ -9,7 +9,7 @@
 #	       $(CC) $^ $(CFLAGS)  -o $@
 # 百分号相当于一个通配符
 
-CC=GCC
+CC=gcc
 CFLAGS=-c -Wall -g
 
 REDIS_NAME = redis-test
@@ -18,10 +18,10 @@ REDIS_OBJS = main.o sds.o
 redis: $(REDIS_NAME)
 
 $(REDIS_NAME): $(REDIS_OBJ)
-	$(CC) $^ -o $@
+	$(CC) -o $@ $^ 
 
 %.o:%.c
-	$(CC) $^ $(CFLAGS) -o $@
+	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
 	$(RM) *.o $(REDIS_NAME) -r
