@@ -17,6 +17,7 @@ typedef struct sdshdr_t {
 
 static inline int sdslen(const sds str)
 {
+    //获取sds->buf所对应的sds的起始地址
     sdshdr *sh = (void *)(str - (sizeof(sdshdr)));
     return sh->len;
 }
