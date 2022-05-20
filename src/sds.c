@@ -32,9 +32,9 @@ sds sdsnewlen(const char *str, int strlen)
 
 sds sdsnew(const char *str)
 {
-    int strlen = 0;
+    int len = 0;
     if (str != NULL) {
-        strlen = sizeof(str);
+        len = strlen(str);
     }
-    return sdsnewlen(str, strlen); 
+    return sdsnewlen(str, len); 
 }
