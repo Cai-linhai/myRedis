@@ -38,3 +38,8 @@ sds sdsnew(const char *str)
     }
     return sdsnewlen(str, len); 
 }
+
+void sdsfree(sds s) {
+    if (s == NULL) return;
+    zfree(s-sizeof(sdshdr));
+}
