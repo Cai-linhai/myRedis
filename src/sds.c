@@ -204,11 +204,80 @@ sds sdscatlen(sds buf, sds str, int len)
 }
 
 /*
- * 将给定字符串 t 追加到 sds 的末尾
+ * 将给定字符串 str 追加到 sds 的末尾
  * 
  * return：追加成功返回新 sds ，失败返回 NULL
  */
 sds sdscat(sds buf, const sds str)
 {
     return sdscatlen(buf, str, strlen(str));
+}
+
+/*
+ * 将字符串 t 的前 len 个字符复制到 sds s 当中，
+ * 并在字符串的最后添加终结符。
+ *
+ * 如果 sds 的长度少于 len 个字符，那么扩展 sds
+ *
+ * return：复制成功返回新的 sds ，否则返回 NULL
+ */
+sds sdscpylen(sds buf, sds str, int cpylen)
+{
+    int curlen, avail;
+    sdshdr *sh;
+
+    if (str == NULL || cpylen == 0) {
+        return NULL;
+    }
+
+    curlen = sdslen(buf);
+    avail = sdsavail(buf);
+
+    if (curlen + avail < cpylen) {
+        buf = sdsMakeRoomFor(buf, cpylen - curlen);
+        if (buf == NULL) {
+            return NULL;
+        }
+    }
+    sh = (void *)(buf - (sizeof(sdshdr)));
+
+    memcpy(buf, str, cpylen);
+    buf[cpylen] = '\0';
+
+    sh->len = cpylen;
+
+    return sh->buf;
+}
+
+/*
+ * 将给定字符串 str 复制到sds中（覆盖原字符串）
+ * 
+ * return：追加成功返回 sds ，失败返回 NULL
+ */
+sds sdscpy(sds buf, const sds str)
+{
+    return sdscpylen(buf, str, strlen(str));
+}
+
+/*
+ * 对比两个 sds ， strcmp 的 sds 版本
+ *
+ * return：相等返回 0 ，s1 较大返回正数， s2 较大返回负数
+ */
+int sdscmp(sds buf1, sds buf2)
+{
+    int len1, len2, minlen, cmpret;
+
+    len1 = sdslen(buf1);
+    len2 = sdslen(buf2);
+
+    minlen = (len1 <= len2) ? len1 : len2;
+
+    cmpret = memcmp(buf1, buf2, minlen);
+
+    if (cmpret == 0 && len1 == len2) {
+        return 0;
+    } else {
+        return len1 - len2;
+    }
 }
