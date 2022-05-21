@@ -143,7 +143,7 @@ sds sdsMakeRooomFor(sds buf, int addlen)
     newsh = (sdshdr *)realloc(sh, sizeof(sdshdr) + newlen + 1);
 
     //扩展空间失败,原sh空间还在
-    if (newsh = NULL) {
+    if (newsh == NULL) {
         return NULL;
     }
 

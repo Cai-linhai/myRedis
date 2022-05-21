@@ -8,7 +8,7 @@ int main()
     sdshdr *sh = (sdshdr *)(name - (sizeof(sdshdr)));
 
     sds newname = sdscat(name, " is so handsam!");
-    sdshdr *newsh =  (sdshdr *)(newname - (sizeof(sdshdr)));
+    sdshdr *newsh = (sdshdr *)(newname - (sizeof(sdshdr)));
     
     printf("name is %s.\n", name);
     printf("name len is %d, avail is %d.\n", sh->len, sh->avail);
