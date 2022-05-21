@@ -35,6 +35,7 @@ static inline int sdsavail(const sds str)
 
 sds sdsnewlen(const char *str, int strlen);
 sds sdsnew(const char *str);
+sds sdscat(sds buf, const sds str)
 
 
 #endif

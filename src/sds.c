@@ -175,3 +175,40 @@ sds sdsRemoveFreeSpace(sds buf)
     return sh->buf;
 }
 
+sds sdscatlen(sds buf, sds str, int len)
+{
+    int curlen;
+    sdshdr *sh;
+
+    if(str == NULL || len == 0) {
+        return buf;
+    }
+
+    curlen = sdslen(buf);
+
+    buf = sdsMakeRooomFor(buf, len);
+    if (buf == NULL) {
+        return NULL;
+    }
+
+    memcpy(buf + curlen, str, len);
+
+    sh = (sdshdr *)(buf - (sizeof(sdshdr)));
+
+    sh->len = curlen + len;
+    sh->avail = sh->avail - len;
+
+    buf[curlen + len] = '\0';
+
+    return sh->buf;
+}
+
+/*
+ * 将给定字符串 t 追加到 sds 的末尾
+ * 
+ * return：追加成功返回新 sds ，失败返回 NULL
+ */
+sds sdscat(sds buf, const sds str)
+{
+    return sdscatlen(buf, str, strlen(str));
+}

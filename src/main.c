@@ -5,13 +5,15 @@
 int main()
 {
     sds name = sdsnew("cailinhai");
-    sdshdr *sh =  (void *)(name - (sizeof(sdshdr)));
+    sdshdr *sh =  (sdshdr *)(name - (sizeof(sdshdr)));
 
-    printf("len = %d.\n", sdslen(name));
-    printf("sizeof sdshdr %d.\n", sizeof(sdshdr));
-    printf("sds->buf address %p.\n", name);
-    printf("sds address %p.\n", sh);
-
+    sds newname = sdscat(name, " is so handsam!");
+    sdshdr *newsh =  (sdshdr *)(newname - (sizeof(sdshdr)));
+    
+    printf("name is %s.\n", name);
+    printf("name len is %d, avail is %d.\n", sh->len, sh->avail);
+    printf("newname is %s.\n", newname);
+    printf("newname len is %d, avail is %d.\n", newsh->len, newsh->avail);
 
     return 0;
 }
