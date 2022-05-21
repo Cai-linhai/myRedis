@@ -4,6 +4,11 @@
 #include <sys/types.h>
 #include <stdarg.h>
 
+/*
+ * 最大预分配长度
+ */
+#define SDS_MAX_PREALLOC (1024*1024)
+
 typedef char * sds;
 
 typedef struct sdshdr_t {
@@ -18,13 +23,13 @@ typedef struct sdshdr_t {
 static inline int sdslen(const sds str)
 {
     //获取sds->buf所对应的sds的起始地址
-    sdshdr *sh = (void *)(str - (sizeof(sdshdr)));
+    sdshdr *sh = (sdshdr *)(str - (sizeof(sdshdr)));
     return sh->len;
 }
 
 static inline int sdsavail(const sds str)
 {
-    sdshdr *sh = (void *)(str - (sizeof(sdshdr)));
+    sdshdr *sh = (sdshdr *)(str - (sizeof(sdshdr)));
     return sh->avail;
 }
 
