@@ -114,7 +114,7 @@ void sdsclear(sds buf)
  * return：扩展成功返回扩展后的 sds
  *         扩展失败返回 NULL
  */
-sds sdsMakeRooomFor(sds buf, int addlen)
+sds sdsMakeRoomFor(sds buf, int addlen)
 {
     int avail;
     int len, newlen;
@@ -140,7 +140,7 @@ sds sdsMakeRooomFor(sds buf, int addlen)
 
     //realloc 更改已经配置的内存空间，即更改由malloc()函数分配的内存空间的大小(扩大或缩小)
     //realloc 扩大空间，如果原地址空间后续由足够的连续空间，则直接在原地址上扩展，否则在堆中重新寻找一块足够的空间进行分配
-    newsh = (sdshdr *)realloc(sh, sizeof(sdshdr) + newlen + 1);
+    newsh = (sdshdr *)zrealloc(sh, sizeof(sdshdr) + newlen + 1);
 
     //扩展空间失败,原sh空间还在
     if (newsh == NULL) {
@@ -168,7 +168,7 @@ sds sdsRemoveFreeSpace(sds buf)
     sh = (void *)(buf - (sizeof(sdshdr)));
 
     //realloc缩小空间，则就在原地址空间上做缩减
-    sh = (sdshdr *)realloc(sh, sizeof(sdshdr) + len + 1);
+    sh = (sdshdr *)zrealloc(sh, sizeof(sdshdr) + len + 1);
 
     sh->avail = 0;
 
@@ -186,7 +186,7 @@ sds sdscatlen(sds buf, sds str, int len)
 
     curlen = sdslen(buf);
 
-    buf = sdsMakeRooomFor(buf, len);
+    buf = sdsMakeRoomFor(buf, len);
     if (buf == NULL) {
         return NULL;
     }

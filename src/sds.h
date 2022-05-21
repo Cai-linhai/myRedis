@@ -39,7 +39,7 @@ extern sds sdsnewempty(void);
 extern void sdsfree(sds buf);
 extern sds sdsdup(const sds buf);
 extern void sdsclear(sds buf);
-extern sds sdsMakeRooomFor(sds buf, int addlen);
+extern sds sdsMakeRoomFor(sds buf, int addlen);
 extern sds sdsRemoveFreeSpace(sds buf);
 extern sds sdscatlen(sds buf, sds str, int len);
 extern sds sdscat(sds buf, const sds str);
