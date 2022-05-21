@@ -5,10 +5,10 @@
 int main()
 {
     sds name = sdsnew("cailinhai");
-    sdshdr *sh = (sdshdr *)(name - (sizeof(sdshdr)));
+    sdshdr *sh = (void *)(name - (sizeof(sdshdr)));
 
     sds newname = sdscat(name, " is so handsam!");
-    sdshdr *newsh = (sdshdr *)(newname - (sizeof(sdshdr)));
+    sdshdr *newsh = (void *)(newname - (sizeof(sdshdr)));
     
     printf("name is %s.\n", name);
     printf("name len is %d, avail is %d.\n", sh->len, sh->avail);

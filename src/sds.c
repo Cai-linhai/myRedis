@@ -98,7 +98,7 @@ sds sdsdup(const sds buf)
  */
 void sdsclear(sds buf)
 {
-    sdshdr *sh = (sdshdr *)(buf - (sizeof(sdshdr)));
+    sdshdr *sh = (void *)(buf - (sizeof(sdshdr)));
 
     sh->avail = sh->avail + sh->len;
     sh->len = 0;
@@ -136,7 +136,7 @@ sds sdsMakeRooomFor(sds buf, int addlen)
         newlen = newlen + SDS_MAX_PREALLOC;
     }
 
-    sh = (sdshdr *)(buf - (sizeof(sdshdr)));
+    sh = (void *)(buf - (sizeof(sdshdr)));
 
     //realloc 更改已经配置的内存空间，即更改由malloc()函数分配的内存空间的大小(扩大或缩小)
     //realloc 扩大空间，如果原地址空间后续由足够的连续空间，则直接在原地址上扩展，否则在堆中重新寻找一块足够的空间进行分配
@@ -165,7 +165,7 @@ sds sdsRemoveFreeSpace(sds buf)
     sdshdr *sh;
 
     len = sdslen(buf);
-    sh = (sdshdr *)(buf - (sizeof(sdshdr)));
+    sh = (void *)(buf - (sizeof(sdshdr)));
 
     //realloc缩小空间，则就在原地址空间上做缩减
     sh = (sdshdr *)realloc(sh, sizeof(sdshdr) + len + 1);
@@ -193,7 +193,7 @@ sds sdscatlen(sds buf, sds str, int len)
 
     memcpy(buf + curlen, str, len);
 
-    sh = (sdshdr *)(buf - (sizeof(sdshdr)));
+    sh = (void *)(buf - (sizeof(sdshdr)));
 
     sh->len = curlen + len;
     sh->avail = sh->avail - len;
