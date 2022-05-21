@@ -33,9 +33,17 @@ static inline int sdsavail(const sds str)
     return sh->avail;
 }
 
-sds sdsnewlen(const char *str, int strlen);
-sds sdsnew(const char *str);
-sds sdscat(sds buf, const sds str)
+extern sds sdsnewlen(const char *str, int strlen);
+extern sds sdsnew(const char *str);
+extern sds sdsnewempty(void);
+extern void sdsfree(sds buf);
+extern sds sdsdup(const sds buf);
+extern void sdsclear(sds buf);
+extern sds sdsMakeRooomFor(sds buf, int addlen);
+extern sds sdsRemoveFreeSpace(sds buf);
+extern sds sdscatlen(sds buf, sds str, int len);
+extern sds sdscat(sds buf, const sds str);
+
 
 
 #endif

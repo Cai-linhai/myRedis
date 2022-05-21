@@ -5,7 +5,7 @@
 int main()
 {
     sds name = sdsnew("cailinhai");
-    sdshdr *sh =  (sdshdr *)(name - (sizeof(sdshdr)));
+    sdshdr *sh = (sdshdr *)(name - (sizeof(sdshdr)));
 
     sds newname = sdscat(name, " is so handsam!");
     sdshdr *newsh =  (sdshdr *)(newname - (sizeof(sdshdr)));
