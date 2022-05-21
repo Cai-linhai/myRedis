@@ -43,7 +43,9 @@ extern sds sdsMakeRoomFor(sds buf, int addlen);
 extern sds sdsRemoveFreeSpace(sds buf);
 extern sds sdscatlen(sds buf, sds str, int len);
 extern sds sdscat(sds buf, const sds str);
-
+extern sds sdscpylen(sds buf, sds str, int cpylen);
+extern sds sdscpy(sds buf, const sds str);
+extern int sdscmp(sds buf1, sds buf2);
 
 
 #endif
