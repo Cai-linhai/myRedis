@@ -99,7 +99,7 @@ typedef struct listIter {
 #define listGetMatchMethod(l) ((l)->match)
 
 /* Prototypes */
-list *listCreate(void);
+extern list *listCreate(void);
 void listRelease(list *list);
 list *listAddNodeHead(list *list, void *value);
 list *listAddNodeTail(list *list, void *value);

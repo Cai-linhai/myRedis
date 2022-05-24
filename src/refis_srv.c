@@ -34,7 +34,7 @@ void getRunid(char *ptr, int size)
     ptr[size] = '\0';
 }
 
-void serverConfig_init(void)
+void ServerConfig_init(void)
 {
     getRunid(Server.runid, REDIS_RUN_ID_SIZE);
 
@@ -45,16 +45,25 @@ void serverConfig_init(void)
     Server.port = REDIS_CONFIG_PORT;
 }
 
+void Server_init(void)
+{
+    //初始化客户端
+    Server.client = listCreate();
+
+    
+}
 
 int main(int argc, char **argv)
 {
     //初始化服务器默认配置
-    serverConfig_init();
+    ServerConfig_init();
 
     //检查是否使用指定的配置文件
     if (argc > 2) {
         fprintf(stderr,"Please enter redis config.\n");
     }
+
+    Server_init();
 
     return;
 }

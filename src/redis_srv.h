@@ -15,6 +15,8 @@
 #include <netinet/in.h>
 #include <lua.h>
 #include <signal.h>
+#include "adlist.h"
+#include "dict.h"
 
 /* Error codes */
 #define REDIS_OK                0
@@ -87,6 +89,9 @@ typedef struct redisServer{
 
     //服务运行端口号
     int port;
+
+    //记录客户端链表
+    list *client;
 
 } redisServer;
 
