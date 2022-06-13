@@ -43,12 +43,26 @@ void ServerConfig_init(void)
     Server.hz = REDIS_CONFIG_HZ;
 
     Server.port = REDIS_CONFIG_PORT;
+
+    Server.fd_cnt = 0;
+}
+
+int listenClient(int port, int *fd, int *count)
+{
+
 }
 
 void Server_init(void)
 {
     //初始化客户端
     Server.client = listCreate();
+
+    //监听客户端
+    if (Server.port != 0) {
+        if (listenClient(Server.port, Server.fd, &Server.fd_cnt) == REDIS_ERR) {
+            exit(1);
+        }
+    }
 
     
 }
