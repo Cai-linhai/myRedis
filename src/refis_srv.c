@@ -44,22 +44,75 @@ void ServerConfig_init(void)
 
     Server.port = REDIS_CONFIG_PORT;
 
+    Server.addr = NULL;
+
     Server.fd_cnt = 0;
+
+    Server.tcp_backlog = REDIS_TCP_BACKLOG;
 }
 
-int listenClient(int port, int *fd, int *count)
+int listenClient(char *addr, int port, int *fd, int *count, int backlog)
 {
+    struct addrinfo hints;
+    struct addrinfo *result;
+    struct addrinfo *p;
+    char _port[6];
+    int ret, s;
 
+    snprintf(_port, 6, "%d", port);
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = 0;
+    hints.ai_flags = AI_PASSIVE;
+
+    ret = getaddrinfo(addr, port, &hints, &result);
+    if (ret != 0) {
+        return REDIS_ERR;
+    }
+
+    for (p = result; p != NULL; p = p->ai_next) {
+        s = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
+        if (s == -1) {
+            continue;
+        }
+
+        ret = bind(s, p->ai_addr, p->ai_addr_len);
+        if (ret == -1) {
+            close(s);
+            return REDIS_ERR;
+        }
+
+        ret = listen(s, backlog);
+        if (ret == -1) {
+            close(s);
+            return REDIS_ERR;
+        }
+ 
+        fd[*count] = s;
+        (*count)++;
+    }
+
+    if (p == NULL) {
+        return REDIS_ERR;
+    }
+
+    freeaddrinfo(result);
+
+    return REDIS_OK;
 }
 
 void Server_init(void)
-{
+{   
+    int ret;
+
     //初始化客户端
     Server.client = listCreate();
 
     //监听客户端
     if (Server.port != 0) {
-        if (listenClient(Server.port, Server.fd, &Server.fd_cnt) == REDIS_ERR) {
+        ret = listenClient(Server.addr, Server.port, Server.fd, &Server.fd_cnt, Server.tcp_backlog);
+        if ( ret == REDIS_ERR) {
             exit(1);
         }
     }

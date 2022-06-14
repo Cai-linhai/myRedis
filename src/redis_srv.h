@@ -15,6 +15,7 @@
 #include <netinet/in.h>
 #include <lua.h>
 #include <signal.h>
+#include <netdb.h>
 #include "adlist.h"
 #include "dict.h"
 
@@ -26,6 +27,7 @@
 #define REDIS_CONFIG_HZ         60
 #define REDIS_CONFIG_PORT       6379
 #define REDIS_CLIENT_MAX        16
+#define REDIS_TCP_BACKLOG       16
 
 /*
  * Redis 对象
@@ -91,11 +93,17 @@ typedef struct redisServer{
     //服务运行端口号
     int port;
 
+    //服务器地址
+    char *addr;
+
     //与客户端建连fd描述符
     int fd[REDIS_CLIENT_MAX]
 
     //fd描述符计数
     int fd_cnt;
+
+    //监听客户端数
+    int tcp_backlog;
 
     //记录客户端链表
     list *client;
